@@ -8,7 +8,7 @@ Yksinkertainen cronjobina ajettava dy.fi domain päivitin
     Käyttäjä: kalle.kayttaja@esimerkk.fi
     salasana: salasana123
     Domain nimi: host.dy.fi
-    @ dyfi.py -u
+    $ dyfi.py -u
 
 ## Nimen lisääminen
 
