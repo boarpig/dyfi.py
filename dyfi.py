@@ -87,6 +87,8 @@ if args.add:
     add_host()
 elif args.edit:
     editor = os.environ['EDITOR']
+    if not editor:
+        editor = 'nano'
     ret = subprocess.call([editor, configname])
 elif args.info:
     for host in config:
