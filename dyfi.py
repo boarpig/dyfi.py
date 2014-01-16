@@ -55,10 +55,19 @@ def save_config():
 def add_host():
     print("Käyttäjä: ", end="")
     user = input()
+    if not user:
+        print("Käyttäjänimi on pakollinen.")
+        exit(1)
     print("Salasana: ", end="")
     password = input()
+    if not password:
+        print("Salasana on pakollinen.")
+        exit(1)
     print("Domain nimi: ", end="")
     hostname = input()
+    if not hostname:
+        print("Domain nimi on pakollinen.")
+        exit(1)
     config[hostname] = {}
     config[hostname]["user"] = user
     config[hostname]["password"] = password
