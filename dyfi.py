@@ -16,8 +16,6 @@ config = configparser.ConfigParser()
 with open(configname) as configfile:
     config.read_file(configfile)
 
-logging.basicConfig(format='%(levelname)s:%(message)s')
-
 def update(user, password, hostname):
     baseurl = "https://www.dy.fi/nic/update?hostname=" 
     req = requests.get(baseurl + hostname, auth=(user, password))
@@ -40,7 +38,6 @@ def update(user, password, hostname):
         logging.error("Päivitys estetty väärinkäytön vuoksi.")
 
 def get_ip():
-    "Gets current ip using checkip service provided by dy.fy"
     req = requests.get("http://checkip.dy.fi/")
     regex = "(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})"
     match = re.search(regex, req.text)
@@ -56,11 +53,11 @@ def save_config():
         config.write(configfile)
 
 def add_host():
-    print("Username: ", end="")
+    print("Käyttäjä: ", end="")
     user = input()
-    print("Password: ", end="")
+    print("Salasana: ", end="")
     password = input()
-    print("Host: ", end="")
+    print("Domain nimi: ", end="")
     hostname = input()
     config[hostname] = {}
     config[hostname]["user"] = user
@@ -69,14 +66,23 @@ def add_host():
     config[hostname]["updated"] = "0"
     save_config()
 
-parser = argparse.ArgumentParser(description='dyfi updater')
-parser.add_argument('--add', action='store_true', help='Add new dy.fi host.')
-parser.add_argument('--edit', action='store_true', help='Edit config file.')
-parser.add_argument('--info', action='store_true', help='Print info on hosts.')
+parser = argparse.ArgumentParser(description='dyfi päivitin')
+parser.add_argument('-a', '--add', action='store_true', 
+                    help='Lisää uusi dy.fi nimi')
+parser.add_argument('-e', '--edit', action='store_true', 
+                    help='Muokkaa asetustiedostoa')
+parser.add_argument('--info', action='store_true', 
+                    help='Tulosta tietoa domain-nimistä')
+parser.add_argument('-v', '--verbose', action='store_true', 
+                    help='Tulosta enemmän tietoa ajettaessa')
 parser.add_argument('-u', '--update', action='store_true', 
-        help='Update all hosts that need updating')
+                    help='Päivitä kaikki nimet jotka tarvitsevat päivittämistä')
 
 args = parser.parse_args()
+if args.verbose:
+    logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
+else:
+    logging.basicConfig(format='%(levelname)s:%(message)s')
 if args.add:
     add_host()
 elif args.edit:
@@ -86,10 +92,10 @@ elif args.info:
     for host in config:
         if not host == "DEFAULT":
             print("[" + host + "]")
-            print("Username:    ", config[host]["user"])
-            print("Latest ip:   ", config[host]["last_ip"])
-            print("Last updated:", since_update(config[host]["updated"]),
-                  "days ago")
+            print("Käyttäjä:    ", config[host]["user"])
+            print("Viimeisin IP:   ", config[host]["last_ip"])
+            print("Viimeksi päivitetty:", since_update(config[host]["updated"]),
+                  "päivää sitten")
 elif args.update:
     ip = get_ip()
     if len(config.sections()) > 0:
@@ -102,11 +108,14 @@ elif args.update:
                     update(config[host]["user"], config[host]["password"], host)
                     config[host]["updated"] = str(datetime.today().timestamp())
                     config[host]["last_ip"] = ip
+                    logging.info("Updated host: " + host)
                     save_config()
+                else:
+                    logging.info("Ohitettiin: " + host)
     else:
-        logging.warning("No hosts found. Run \n\n" +
-                        "  $ dyfi.py --add\n\nto add one of more configs")
+        logging.warning("Ei yhtään nimeä. Aja \n\n" +
+                        "  $ dyfi.py --add\n\nlisätäksesi dy.fi nimi")
         exit(1)
 elif not os.path.exists(configname):
-    print("Config file not found. Run \n\n" +
-          "  $ dyfi.py --add\n\nto add one of more configs")
+    print("Asetustiedostoa ei löytynyt. Aja \n\n" +
+          "  $ dyfi.py --add\n\nlisätäksesi dy.fi nimi")
