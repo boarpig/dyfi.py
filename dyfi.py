@@ -17,6 +17,7 @@ with open(configname) as configfile:
     config.read_file(configfile)
 
 def update(user, password, hostname):
+    success = True
     baseurl = "https://www.dy.fi/nic/update?hostname=" 
     req = requests.get(baseurl + hostname, auth=(user, password))
     if re.match("good [0-9.]+", req.text):
@@ -25,17 +26,25 @@ def update(user, password, hostname):
         logging.warning("IP osoite ei ollut muuttunut viime päivityksestä.")
     elif re.match("badauth", req.text):
         logging.error("Tunnistautuminen epäonnistui.")
+        success = False
     elif re.match("nohost", req.text):
         logging.error("Domain nimeä ei annettu tai käyttäjä ei omista " +
                       "domainia")
+        success = False
     elif re.match("notfqdn", req.text):
         logging.error("Domain nimi ei ole oikea .dy.fi domain")
+        success = False
     elif re.match("badip [0-9.]+", req.text):
         logging.error("IP osoite on virheellinen tai ei suomalaisomisteinen.")
+        success = False
     elif re.match("dnserr", req.text):
         logging.error("Tekninen virhe dy.fi palvelimissa.")
+        success = False
     elif re.match("abuse", req.text):
         logging.error("Päivitys estetty väärinkäytön vuoksi.")
+        success = False
+    return success
+
 
 def get_ip():
     req = requests.get("http://checkip.dy.fi/")
@@ -116,10 +125,14 @@ elif args.update:
                            since_update(config[host]["updated"]) > 5)
                 ip_changed = config[host]["last_ip"] != ip
                 if time_up or ip_changed:
-                    update(config[host]["user"], config[host]["password"], host)
+                    status = update(config[host]["user"], 
+                                    config[host]["password"], host)
                     config[host]["updated"] = str(datetime.today().timestamp())
                     config[host]["last_ip"] = ip
-                    logging.info("Updated host: " + host)
+                    if status:
+                        logging.info("Updated host: " + host)
+                    else:
+                        logging.error("Error while updating: " + host)
                     save_config()
                 else:
                     logging.info("Ohitettiin: " + host)
