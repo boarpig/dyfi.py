@@ -19,7 +19,7 @@ muuttujaa ei ole asetettu
 
 dyfi.py on suunniteltu ajettavaksi cronjobina, esim. kerran päivässä. dyfi.py
 pitää kirjaa mikä on viimeisin IP osoite sekä milloin nimi on viimeksi 
-päivitetty, eikä yritä edes päivittää IP osoitetta jos edellisestä 
+päivitetty, eikä yritä edes päivittää IP-osoitetta jos edellisestä 
 päivityksestä on alle 5 päivää tai koneen IP-osoite ei ole vaihtunut.
 
 cronjob lisätään ajamalla
@@ -31,8 +31,9 @@ ja lisäämällä rivit
     @reboot dyfi.py -u
     37 16 * * * dyfi.py -u
 
-ensimmäinen rivi tarkoittaa, että dyfi päivitys ajetaan joka kerta kun kone
-käynnistyy, ja toinen rivi sitä että dyfi.py tarkistaa päivityksen tarpeen
-kerran päivässä kun kellon on 16:37. On suositeltavaa, että minuuttiosuus
-asetetaan joksikin satunnaisluvuksi 0 ja 59 välillä, jotta dy.fi palvelimet
-eivät kuormitu, koska kaikki haluavat päivittää dy.fi nimensä samaan aikaan.
+Rivit tarkoittavat sitä, että dyfi päivitys tarkistetaan joka kerta kun kone
+käynnistyy, sekä päivittäin kello 16:37. Voit syöttää minuutti ja tunti kohtaan
+mitkä vain kellonajat, mutta on suositeltavaa, että minuuttiosuus asetetaan 
+joksikin satunnaisluvuksi 0 ja 59 välillä, jotta dy.fi palvelimet eivät 
+kuormitu, jos vaikka kaikki haluavat päivittää dy.fi nimensä samaan aikaan
+tasatuntina.
