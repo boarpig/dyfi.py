@@ -62,18 +62,15 @@ def save_config():
         config.write(configfile)
 
 def add_host():
-    print("Käyttäjä: ", end="")
-    user = input()
+    user = input("Käyttäjä: ")
     if not user:
         print("Käyttäjänimi on pakollinen.")
         exit(1)
-    print("Salasana: ", end="")
-    password = input()
+    password = input("Salasana: ")
     if not password:
         print("Salasana on pakollinen.")
         exit(1)
-    print("Domain nimi: ", end="")
-    hostname = input()
+    hostname = input("Domain nimi: ")
     if not hostname:
         print("Domain nimi on pakollinen.")
         exit(1)
@@ -112,8 +109,8 @@ elif args.info:
     for host in config:
         if not host == "DEFAULT":
             print("[" + host + "]")
-            print("Käyttäjä:    ", config[host]["user"])
-            print("Viimeisin IP:   ", config[host]["last_ip"])
+            print("Käyttäjä:           ", config[host]["user"])
+            print("Viimeisin IP:       ", config[host]["last_ip"])
             print("Viimeksi päivitetty:", since_update(config[host]["updated"]),
                   "päivää sitten")
 elif args.update:
