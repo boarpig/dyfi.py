@@ -32,7 +32,7 @@ päivityksestä on alle 5 päivää tai koneen IP-osoite ei ole vaihtunut.
 
 cronjob lisätään ajamalla
 
-    $ cronjob -e
+    $ crontab -e
 
 ja lisäämällä rivit
 
