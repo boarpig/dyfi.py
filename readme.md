@@ -44,4 +44,8 @@ käynnistyy, sekä päivittäin kello 16:37. Voit syöttää minuutti ja tunti k
 mitkä vain kellonajat, mutta on suositeltavaa, että minuuttiosuus asetetaan 
 joksikin satunnaisluvuksi 0 ja 59 välillä, jotta dy.fi palvelimet eivät 
 kuormitu, jos vaikka kaikki haluavat päivittää dy.fi nimensä samaan aikaan
-tasatuntina.
+tasatuntina. Lisätietoja löytyy [crontabin
+man-sivulta](http://manpages.debian.net/cgi-bin/man.cgi?query=crontab&sektion=5)
+tai komentorivillä
+
+    $ man 5 crontab
