@@ -99,13 +99,16 @@ if args.verbose:
 else:
     logging.basicConfig(format='%(levelname)s:%(message)s')
 if args.add:
+    logging.info("Adding new host.")
     add_host()
 elif args.edit:
+    logging.info("Adding new host.")
     editor = os.environ['EDITOR']
     if not editor:
         editor = 'nano'
     ret = subprocess.call([editor, configname])
 elif args.info:
+    logging.info("Adding new host.")
     for host in config:
         if not host == "DEFAULT":
             print("[" + host + "]")
@@ -114,6 +117,7 @@ elif args.info:
             print("Viimeksi päivitetty:", since_update(config[host]["updated"]),
                   "päivää sitten")
 elif args.update:
+    logging.info("Adding new host.")
     ip = get_ip()
     if len(config.sections()) > 0:
         for host in config:
@@ -140,3 +144,5 @@ elif args.update:
 elif not os.path.exists(configname):
     print("Asetustiedostoa ei löytynyt. Aja \n\n" +
           "  $ dyfi.py --add\n\nlisätäksesi dy.fi nimi")
+else:
+    parser.print_help()
