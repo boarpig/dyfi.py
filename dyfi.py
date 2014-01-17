@@ -92,6 +92,8 @@ parser.add_argument('-v', '--verbose', action='store_true',
                     help='Tulosta enemmän tietoa ajettaessa')
 parser.add_argument('-u', '--update', action='store_true', 
                     help='Päivitä kaikki nimet jotka tarvitsevat päivittämistä')
+parser.add_argument('-f', '--force', action='store_true', 
+                    help='Pakota domainin päivitys.')
 
 args = parser.parse_args()
 if args.verbose:
@@ -124,7 +126,7 @@ elif args.update:
                 time_up = (config[host]["updated"] == "0" or 
                            since_update(config[host]["updated"]) > 5)
                 ip_changed = config[host]["last_ip"] != ip
-                if time_up or ip_changed:
+                if time_up or ip_changed or args.force:
                     status, message = update(config[host]["user"], 
                                              config[host]["password"], host)
                     config[host]["updated"] = str(datetime.today().timestamp())
