@@ -43,7 +43,7 @@ def update(user, password, hostname):
     elif re.match("abuse", req.text):
         logging.error("Päivitys estetty väärinkäytön vuoksi.")
         success = False
-    return success
+    return success, req.text
 
 
 def get_ip():
@@ -99,16 +99,15 @@ if args.verbose:
 else:
     logging.basicConfig(format='%(levelname)s:%(message)s')
 if args.add:
-    logging.info("Adding new host.")
+    logging.info("--add lippua käytetty")
     add_host()
 elif args.edit:
-    logging.info("Adding new host.")
+    logging.info("--edit lippu käytetty")
     editor = os.environ['EDITOR']
     if not editor:
         editor = 'nano'
     ret = subprocess.call([editor, configname])
 elif args.info:
-    logging.info("Adding new host.")
     for host in config:
         if not host == "DEFAULT":
             print("[" + host + "]")
@@ -117,7 +116,7 @@ elif args.info:
             print("Viimeksi päivitetty:", since_update(config[host]["updated"]),
                   "päivää sitten")
 elif args.update:
-    logging.info("Adding new host.")
+    logging.info("Lisätään uusi nimi")
     ip = get_ip()
     if len(config.sections()) > 0:
         for host in config:
@@ -126,14 +125,15 @@ elif args.update:
                            since_update(config[host]["updated"]) > 5)
                 ip_changed = config[host]["last_ip"] != ip
                 if time_up or ip_changed:
-                    status = update(config[host]["user"], 
-                                    config[host]["password"], host)
+                    status, message = update(config[host]["user"], 
+                                             config[host]["password"], host)
                     config[host]["updated"] = str(datetime.today().timestamp())
                     config[host]["last_ip"] = ip
                     if status:
-                        logging.info("Updated host: " + host)
+                        logging.info("Päivitettiin nimi: " + host)
                     else:
-                        logging.error("Error while updating: " + host)
+                        logging.error("Virhe päivityksessä: " + host)
+                        logging.error(message)
                     save_config()
                 else:
                     logging.info("Ohitettiin: " + host)
@@ -142,6 +142,7 @@ elif args.update:
                         "  $ dyfi.py --add\n\nlisätäksesi dy.fi nimi")
         exit(1)
 elif not os.path.exists(configname):
+    logging.info("Asetustiedostoa ei löytynyt.")
     print("Asetustiedostoa ei löytynyt. Aja \n\n" +
           "  $ dyfi.py --add\n\nlisätäksesi dy.fi nimi")
 else:
