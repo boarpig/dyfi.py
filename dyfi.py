@@ -13,8 +13,13 @@ import subprocess
 configname = os.path.expanduser("~/.dyfi.cfg")
 
 config = configparser.ConfigParser()
-with open(configname) as configfile:
-    config.read_file(configfile)
+if not os.path.exists(configname):
+    logging.info("Asetustiedostoa ei löytynyt.")
+    print("Asetustiedostoa ei löytynyt. Aja \n\n" +
+          "  $ dyfi.py --add\n\nlisätäksesi dy.fi nimi")
+else:
+    with open(configname) as configfile:
+        config.read_file(configfile)
 
 def update(user, password, hostname):
     success = True
@@ -143,9 +148,5 @@ elif args.update:
         logging.warning("Ei yhtään nimeä. Aja \n\n" +
                         "  $ dyfi.py --add\n\nlisätäksesi dy.fi nimi")
         exit(1)
-elif not os.path.exists(configname):
-    logging.info("Asetustiedostoa ei löytynyt.")
-    print("Asetustiedostoa ei löytynyt. Aja \n\n" +
-          "  $ dyfi.py --add\n\nlisätäksesi dy.fi nimi")
 else:
     parser.print_help()
