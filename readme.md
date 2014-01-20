@@ -37,11 +37,11 @@ cronjob lisätään ajamalla
 ja lisäämällä rivit
 
     @reboot dyfi.py -u
-    37 16 * * * dyfi.py -u
+    0 */4 * * * dyfi.py -u
 
 Rivit tarkoittavat sitä, että dyfi päivitys tarkistetaan joka kerta kun kone
-käynnistyy, sekä päivittäin kello 16:37. Voit syöttää minuutti ja tunti kohtaan
-mitkä vain kellonajat, mutta on suositeltavaa, että minuuttiosuus asetetaan 
+käynnistyy, sekä neljän tunnin välein. Voit syöttää minuutti kohtaan minkä 
+vain kellonajan, mutta on suositeltavaa, että minuuttiosuus asetetaan 
 joksikin satunnaisluvuksi 0 ja 59 välillä, jotta dy.fi palvelimet eivät 
 kuormitu, jos vaikka kaikki haluavat päivittää dy.fi nimensä samaan aikaan
 tasatuntina. Lisätietoja löytyy [crontabin
