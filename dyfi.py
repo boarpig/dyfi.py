@@ -87,16 +87,17 @@ def add_host():
     save_config()
 
 parser = argparse.ArgumentParser(description='dyfi päivitin')
-parser.add_argument('-a', '--add', action='store_true', 
+group = parser.add_mutually_exclusive_group()
+group.add_argument('-a', '--add', action='store_true', 
                     help='Lisää uusi dy.fi nimi')
-parser.add_argument('-e', '--edit', action='store_true', 
+group.add_argument('-e', '--edit', action='store_true', 
                     help='Muokkaa asetustiedostoa')
-parser.add_argument('-i', '--info', action='store_true', 
+group.add_argument('-u', '--update', action='store_true', 
+                    help='Päivitä kaikki nimet jotka tarvitsevat päivittämistä')
+group.add_argument('-i', '--info', action='store_true', 
                     help='Tulosta tietoa domain-nimistä')
 parser.add_argument('-v', '--verbose', action='store_true', 
                     help='Tulosta enemmän tietoa ajettaessa')
-parser.add_argument('-u', '--update', action='store_true', 
-                    help='Päivitä kaikki nimet jotka tarvitsevat päivittämistä')
 parser.add_argument('-f', '--force', action='store_true', 
                     help='Pakota domainin päivitys.')
 
