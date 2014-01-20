@@ -123,7 +123,7 @@ elif args.info:
             print("Viimeksi päivitetty:", since_update(config[host]["updated"]),
                   "päivää sitten")
 elif args.update:
-    logging.info("Lisätään uusi nimi")
+    logging.info("Päivitetään dy.fi nimet")
     ip = get_ip()
     if len(config.sections()) > 0:
         for host in config:
