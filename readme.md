@@ -44,8 +44,13 @@ käynnistyy, sekä neljän tunnin välein. Voit syöttää minuutti kohtaan mink
 vain kellonajan, mutta on suositeltavaa, että minuuttiosuus asetetaan 
 joksikin satunnaisluvuksi 0 ja 59 välillä, jotta dy.fi palvelimet eivät 
 kuormitu, jos vaikka kaikki haluavat päivittää dy.fi nimensä samaan aikaan
-tasatuntina. Lisätietoja löytyy [crontabin
-man-sivulta](http://manpages.debian.net/cgi-bin/man.cgi?query=crontab&sektion=5)
+tasatuntina. 
+
+On turvallista ajaa päivitysohjelma vaikka kerran tunnissa, sillä se ei ota
+yhteyttä dy.fi palvelimiin, kuin sillon, jos se kokee päivityksen
+tarpeelliseksi.
+
+Lisätietoja löytyy cronjobien tekemiseen löytyy [crontabin man-sivulta](http://manpages.debian.net/cgi-bin/man.cgi?query=crontab&sektion=5)
 tai komentorivillä
 
     $ man 5 crontab
