@@ -50,7 +50,7 @@ On turvallista ajaa päivitysohjelma vaikka kerran tunnissa, sillä se ei ota
 yhteyttä dy.fi palvelimiin, kuin sillon, jos se kokee päivityksen
 tarpeelliseksi.
 
-Lisätietoja löytyy cronjobien tekemiseen löytyy [crontabin man-sivulta](http://manpages.debian.net/cgi-bin/man.cgi?query=crontab&sektion=5)
+Lisätietoja cronjobien tekemiseen löytyy [crontabin man-sivulta](http://manpages.debian.net/cgi-bin/man.cgi?query=crontab&sektion=5)
 tai komentorivillä
 
     $ man 5 crontab
