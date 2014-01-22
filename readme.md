@@ -36,8 +36,11 @@ cronjob lisätään ajamalla
 
 ja lisäämällä rivit
 
-    @reboot dyfi.py -u
-    0 */4 * * * dyfi.py -u
+    @reboot /path/to/dyfi.py -u
+    0 */4 * * * /path/to/dyfi.py -u
+
+Huomaa, että on suositeltavaa laittaa absoluuttinen polku dyfi.py ohjelmaan tai
+cron ei muuten välttämättä löydä sitä.
 
 Rivit tarkoittavat sitä, että dyfi päivitys tarkistetaan joka kerta kun kone
 käynnistyy, sekä neljän tunnin välein. Voit syöttää minuutti kohtaan minkä 
