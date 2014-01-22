@@ -129,8 +129,8 @@ elif args.update:
     if len(config.sections()) > 0:
         for host in config:
             if host != 'DEFAULT':
-                time_up = (config[host]["updated"] == "0" or 
-                           since_update(config[host]["updated"]) > 5)
+                days_since = since_update(config[host]["updated"])
+                time_up = (config[host]["updated"] == "0" or days_since > 5)
                 ip_changed = config[host]["last_ip"] != ip
                 if time_up or ip_changed or args.force:
                     status, message = update(config[host]["user"], 
@@ -144,7 +144,9 @@ elif args.update:
                         logging.error(message)
                     save_config()
                 else:
-                    logging.info("Ohitettiin: " + host)
+                    logging.info(host + ": Ohitettu")
+                    logging.info(host + ": päivitetty " + str(days_since) + 
+                                 " päivää sitten")
     else:
         logging.warning("Ei yhtään nimeä. Aja \n\n" +
                         "  $ dyfi.py --add\n\nlisätäksesi dy.fi nimi")
