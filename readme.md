@@ -1,6 +1,8 @@
 # dyfi.py
 
-Yksinkertainen cronjobina ajettava dy.fi domain päivitin
+Yksinkertainen cronjobina ajettava dy.fi domain päivitin. dyfi.py vaatii
+toimiakseen python3 ja [Requests](http://docs.python-requests.org/en/latest/)
+kirjaston
 
 ## Lyhyesti
 
