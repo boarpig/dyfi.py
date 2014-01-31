@@ -59,7 +59,7 @@ def get_ip():
 
 def since_update(time):
     now = datetime.today()
-    old = datetime.fromtimestamp(int(time))
+    old = datetime.fromtimestamp(int(float(time)))
     return (now - old).days
 
 def save_config():
