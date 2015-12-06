@@ -34,8 +34,10 @@ dyfi.py:n mukana tulee systemd service ja timer unit-tiedostot.
 Aseta systemd/ hakemistosta löytyvät `dyfi.service` ja `dyfi.timer` tiedostot
 `/etc/systemd/system/` hakemistoon ja aktivoi ja käynnistä timer.
 
-    # cp systemd/dyfi.{service,timer} /etc/systemd/system
-    # systemctl start dyfi.timer
+```
+# cp systemd/dyfi.{service,timer} /etc/systemd/system
+# systemctl start dyfi.timer
+```
 
 **HUOM!** Tämä olettaa, että `dyfi.py` on asennettu `/usr/bin/` hakemistoon. Jos
 `dyfi.py` on jossain muualla, muokkaa `dyfi.service` tiedoston `ExecStart=`
@@ -46,8 +48,10 @@ osiota.
 Aseta systemd/ hakemistosta löytyvät `dyfi.service` ja `dyfi.timer` tiedostot
 `~/.config/systemd/user/` hakemistoon ja aktivoi ja käynnistä timer.
 
-    $ cp systemd/dyfi.{service,timer} ~/.config/systemd/user/
-    # systemctl --user start dyfi.timer
+```
+$ cp systemd/dyfi.{service,timer} ~/.config/systemd/user/
+$ systemctl --user start dyfi.timer
+```
 
 **HUOM!** Tämä olettaa, että `dyfi.py` on asennettu `/usr/bin/` hakemistoon. Jos
 `dyfi.py` on jossain muualla, muokkaa `dyfi.service` tiedoston `ExecStart=`
