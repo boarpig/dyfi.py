@@ -1,0 +1,9 @@
+[Unit]
+Description=Run dyfi service daily to check if IP needs updating
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=1d
+
+[Install]
+WantedBy=network-online.target

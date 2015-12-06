@@ -27,10 +27,33 @@ muuttujaa ei ole asetettu
 
 ## Käyttö
 
-dyfi.py on suunniteltu ajettavaksi cronjobina, esim. kerran päivässä. dyfi.py
-pitää kirjaa mikä on viimeisin IP osoite sekä milloin nimi on viimeksi 
-päivitetty, eikä yritä edes päivittää IP-osoitetta jos edellisestä 
-päivityksestä on alle 5 päivää tai koneen IP-osoite ei ole vaihtunut.
+dyfi.py:n mukana tulee systemd service ja timer unit-tiedostot. 
+
+### timerin ajaminen roottina
+
+Aseta systemd/ hakemistosta löytyvät `dyfi.service` ja `dyfi.timer` tiedostot
+`/etc/systemd/system/` hakemistoon ja aktivoi ja käynnistä timer.
+
+    # cp systemd/dyfi.{service,timer} /etc/systemd/system
+    # systemctl start dyfi.timer
+
+**HUOM!** Tämä olettaa, että `dyfi.py` on asennettu `/usr/bin/` hakemistoon. Jos
+`dyfi.py` on jossain muualla, muokkaa `dyfi.service` tiedoston `ExecStart=`
+osiota.
+
+### timerin ajaminen tavallisena käyttäjänä
+
+Aseta systemd/ hakemistosta löytyvät `dyfi.service` ja `dyfi.timer` tiedostot
+`~/.config/systemd/user/` hakemistoon ja aktivoi ja käynnistä timer.
+
+    $ cp systemd/dyfi.{service,timer} ~/.config/systemd/user/
+    # systemctl --user start dyfi.timer
+
+**HUOM!** Tämä olettaa, että `dyfi.py` on asennettu `/usr/bin/` hakemistoon. Jos
+`dyfi.py` on jossain muualla, muokkaa `dyfi.service` tiedoston `ExecStart=`
+osiota.
+
+### dyfi.py:n ajaminen cronilla
 
 cronjob lisätään ajamalla
 
