@@ -135,10 +135,10 @@ elif args.update:
                 if time_up or ip_changed or args.force:
                     status, message = update(config[host]["user"], 
                                              config[host]["password"], host)
-                    config[host]["updated"] = str(round(datetime.today().timestamp()))
-                    config[host]["last_ip"] = ip
                     if status:
                         logging.info("Päivitettiin nimi: " + host)
+                        config[host]["updated"] = str(round(datetime.today().timestamp()))
+                        config[host]["last_ip"] = ip
                     else:
                         logging.error("Virhe päivityksessä: " + host)
                         logging.error(message)
