@@ -1,5 +1,5 @@
 [Unit]
-Description=Run dyfi service daily to check if IP needs updating
+Description=dy.fi domain update timer
 
 [Timer]
 OnBootSec=2min

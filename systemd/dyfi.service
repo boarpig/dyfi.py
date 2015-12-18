@@ -1,6 +1,6 @@
 [Unit]
-Description=dy.fi domain name updater tool
-Documentation=https://github.com/boarpig/dyfi.py
+Description=dy.fi domain name updater service
+Documentation=https://aper.dy.fi/lauri/dyfi.py
 
 [Service]
 Type=oneshot
