@@ -30,7 +30,7 @@ def update(user, password, hostname):
     baseurl = "https://www.dy.fi/nic/update?hostname=" 
     try:
         req = requests.get(baseurl + hostname, auth=(user, password))
-    except ConnectionError:
+    except:
         logger.error("Ei internet yhteyttä. dy.fi palvelimeen ei voitu yhdistää.")
         return False, ""
     else:
@@ -66,7 +66,7 @@ def update(user, password, hostname):
 def get_ip():
     try:
         req = requests.get("http://checkip.dy.fi/")
-    except ConnectionError:
+    except:
         logger.error("Ei internet yhteyttä. IP-osoitetta ei voitu hakea.")
         return None
     else:
