@@ -14,7 +14,7 @@ configname = os.path.expanduser("~/.dyfi.cfg")
 
 config = configparser.ConfigParser()
 if not os.path.exists(configname):
-    logging.info("Asetustiedostoa ei löytynyt.")
+    logger.info("Asetustiedostoa ei löytynyt.")
     print("Asetustiedostoa ei löytynyt. Aja \n\n" +
           "  $ dyfi.py --add\n\nlisätäksesi dy.fi nimi")
 else:
@@ -27,34 +27,34 @@ def update(user, password, hostname):
     try:
         req = requests.get(baseurl + hostname, auth=(user, password))
     except ConnectionError:
-        logging.error("Ei internet yhteyttä. dy.fi palvelimeen ei voitu yhdistää.")
+        logger.error("Ei internet yhteyttä. dy.fi palvelimeen ei voitu yhdistää.")
         return False, ""
     else:
         if req.status_code != 200:
             return False, "dy.fi palvelin virhe: {}".format(req.status_code)
         else:
             if re.match("good [0-9.]+", req.text):
-                logging.info("Päivitys onnistui: " + hostname + ", " + req.text)
+                logger.info("Päivitys onnistui: " + hostname + ", " + req.text)
             elif re.match("nochg", req.text):
-                logging.warning("IP osoite ei ollut muuttunut viime päivityksestä.")
+                logger.warning("IP osoite ei ollut muuttunut viime päivityksestä.")
             elif re.match("badauth", req.text):
-                logging.error("Tunnistautuminen epäonnistui.")
+                logger.error("Tunnistautuminen epäonnistui.")
                 success = False
             elif re.match("nohost", req.text):
-                logging.error("Domain nimeä ei annettu tai käyttäjä ei omista " +
+                logger.error("Domain nimeä ei annettu tai käyttäjä ei omista " +
                               "domainia")
                 success = False
             elif re.match("notfqdn", req.text):
-                logging.error("Domain nimi ei ole oikea .dy.fi domain")
+                logger.error("Domain nimi ei ole oikea .dy.fi domain")
                 success = False
             elif re.match("badip [0-9.]+", req.text):
-                logging.error("IP osoite on virheellinen tai ei suomalaisomisteinen.")
+                logger.error("IP osoite on virheellinen tai ei suomalaisomisteinen.")
                 success = False
             elif re.match("dnserr", req.text):
-                logging.error("Tekninen virhe dy.fi palvelimissa.")
+                logger.error("Tekninen virhe dy.fi palvelimissa.")
                 success = False
             elif re.match("abuse", req.text):
-                logging.error("Päivitys estetty väärinkäytön vuoksi.")
+                logger.error("Päivitys estetty väärinkäytön vuoksi.")
                 success = False
             return success, req.text
 
@@ -63,7 +63,7 @@ def get_ip():
     try:
         req = requests.get("http://checkip.dy.fi/")
     except ConnectionError:
-        logging.error("Ei internet yhteyttä. IP-osoitetta ei voitu hakea.")
+        logger.error("Ei internet yhteyttä. IP-osoitetta ei voitu hakea.")
         return None
     else:
         regex = "(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})"
@@ -109,21 +109,17 @@ group.add_argument('-u', '--update', action='store_true',
                     help='Päivitä kaikki nimet jotka tarvitsevat päivittämistä')
 group.add_argument('-i', '--info', action='store_true', 
                     help='Tulosta tietoa domain-nimistä')
-parser.add_argument('-v', '--verbose', action='store_true', 
-                    help='Tulosta enemmän tietoa ajettaessa')
 parser.add_argument('-f', '--force', action='store_true', 
                     help='Pakota domainin päivitys.')
 
 args = parser.parse_args()
-if args.verbose:
-    logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
-else:
-    logging.basicConfig(format='%(levelname)s:%(message)s')
+logger = logging.getLogger("dyfi")
+logger.setLevel(logging.INFO)
 if args.add:
-    logging.info("--add lippua käytetty")
+    logger.info("--add lippua käytetty")
     add_host()
 elif args.edit:
-    logging.info("--edit lippu käytetty")
+    logger.info("--edit lippu käytetty")
     editor = os.environ['EDITOR']
     if not editor:
         editor = 'nano'
@@ -137,7 +133,7 @@ elif args.info:
             print("Viimeksi päivitetty:", since_update(config[host]["updated"]),
                   "päivää sitten")
 elif args.update:
-    logging.info("Päivitetään dy.fi nimet")
+    logger.info("Päivitetään dy.fi nimet")
     ip = get_ip()
     if len(config.sections()) > 0:
         for host in config:
@@ -149,19 +145,19 @@ elif args.update:
                     status, message = update(config[host]["user"], 
                                              config[host]["password"], host)
                     if status:
-                        logging.info("Päivitettiin nimi: " + host)
+                        logger.info("Päivitettiin nimi: " + host)
                         config[host]["updated"] = str(round(datetime.today().timestamp()))
                         config[host]["last_ip"] = ip
                     else:
-                        logging.error("Virhe päivityksessä: " + host)
-                        logging.error(message)
+                        logger.error("Virhe päivityksessä: " + host)
+                        logger.error(message)
                     save_config()
                 else:
-                    logging.info(host + ": Ohitettu")
-                    logging.info(host + ": päivitetty " + str(days_since) + 
+                    logger.info(host + ": IP osoitetta EI päivitetty")
+                    logger.info(host + ": päivitetty " + str(days_since) + 
                                  " päivää sitten")
     else:
-        logging.warning("Ei yhtään nimeä. Aja \n\n" +
+        logger.warning("Ei yhtään nimeä. Aja \n\n" +
                         "  $ dyfi.py --add\n\nlisätäksesi dy.fi nimi")
         exit(1)
 else:
