@@ -10,6 +10,10 @@ import re
 import requests
 import subprocess
 
+logging.basicConfig(level='WARNING')
+logger = logging.getLogger("dyfi")
+logger.setLevel('INFO')
+
 configname = os.path.expanduser("~/.dyfi.cfg")
 
 config = configparser.ConfigParser()
@@ -113,8 +117,6 @@ parser.add_argument('-f', '--force', action='store_true',
                     help='Pakota domainin päivitys.')
 
 args = parser.parse_args()
-logger = logging.getLogger("dyfi")
-logger.setLevel(logging.INFO)
 if args.add:
     logger.info("--add lippua käytetty")
     add_host()
