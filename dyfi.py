@@ -24,38 +24,51 @@ else:
 def update(user, password, hostname):
     success = True
     baseurl = "https://www.dy.fi/nic/update?hostname=" 
-    req = requests.get(baseurl + hostname, auth=(user, password))
-    if re.match("good [0-9.]+", req.text):
-        logging.info("Päivitys onnistui: " + hostname + ", " + req.text)
-    elif re.match("nochg", req.text):
-        logging.warning("IP osoite ei ollut muuttunut viime päivityksestä.")
-    elif re.match("badauth", req.text):
-        logging.error("Tunnistautuminen epäonnistui.")
-        success = False
-    elif re.match("nohost", req.text):
-        logging.error("Domain nimeä ei annettu tai käyttäjä ei omista " +
-                      "domainia")
-        success = False
-    elif re.match("notfqdn", req.text):
-        logging.error("Domain nimi ei ole oikea .dy.fi domain")
-        success = False
-    elif re.match("badip [0-9.]+", req.text):
-        logging.error("IP osoite on virheellinen tai ei suomalaisomisteinen.")
-        success = False
-    elif re.match("dnserr", req.text):
-        logging.error("Tekninen virhe dy.fi palvelimissa.")
-        success = False
-    elif re.match("abuse", req.text):
-        logging.error("Päivitys estetty väärinkäytön vuoksi.")
-        success = False
-    return success, req.text
+    try:
+        req = requests.get(baseurl + hostname, auth=(user, password))
+    except ConnectionError:
+        logging.error("Ei internet yhteyttä. dy.fi palvelimeen ei voitu yhdistää.")
+        return False, ""
+    else:
+        if req.status_code != 200:
+            return False, "dy.fi palvelin palautti virheen"
+        else:
+            if re.match("good [0-9.]+", req.text):
+                logging.info("Päivitys onnistui: " + hostname + ", " + req.text)
+            elif re.match("nochg", req.text):
+                logging.warning("IP osoite ei ollut muuttunut viime päivityksestä.")
+            elif re.match("badauth", req.text):
+                logging.error("Tunnistautuminen epäonnistui.")
+                success = False
+            elif re.match("nohost", req.text):
+                logging.error("Domain nimeä ei annettu tai käyttäjä ei omista " +
+                              "domainia")
+                success = False
+            elif re.match("notfqdn", req.text):
+                logging.error("Domain nimi ei ole oikea .dy.fi domain")
+                success = False
+            elif re.match("badip [0-9.]+", req.text):
+                logging.error("IP osoite on virheellinen tai ei suomalaisomisteinen.")
+                success = False
+            elif re.match("dnserr", req.text):
+                logging.error("Tekninen virhe dy.fi palvelimissa.")
+                success = False
+            elif re.match("abuse", req.text):
+                logging.error("Päivitys estetty väärinkäytön vuoksi.")
+                success = False
+            return success, req.text
 
 
 def get_ip():
-    req = requests.get("http://checkip.dy.fi/")
-    regex = "(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})"
-    match = re.search(regex, req.text)
-    return match.group(1)
+    try:
+        req = requests.get("http://checkip.dy.fi/")
+    except ConnectionError:
+        logging.error("Ei internet yhteyttä. IP-osoitetta ei voitu hakea.")
+        return None
+    else:
+        regex = "(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})"
+        match = re.search(regex, req.text)
+        return match.group(1)
 
 def since_update(time):
     now = datetime.today()
