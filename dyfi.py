@@ -31,7 +31,7 @@ def update(user, password, hostname):
         return False, ""
     else:
         if req.status_code != 200:
-            return False, "dy.fi palvelin palautti virheen"
+            return False, "dy.fi palvelin virhe: {}".format(req.status_code)
         else:
             if re.match("good [0-9.]+", req.text):
                 logging.info("Päivitys onnistui: " + hostname + ", " + req.text)
