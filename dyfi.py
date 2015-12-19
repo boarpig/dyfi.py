@@ -10,7 +10,7 @@ import re
 import requests
 import subprocess
 
-logging.basicConfig(level='WARNING')
+logging.basicConfig(format='%(message)s', level='WARNING')
 logger = logging.getLogger("dyfi")
 logger.setLevel('INFO')
 
@@ -31,34 +31,34 @@ def update(user, password, hostname):
     try:
         req = requests.get(baseurl + hostname, auth=(user, password))
     except:
-        logger.error("Ei internet yhteyttä. dy.fi palvelimeen ei voitu yhdistää.")
+        logger.error("  Ei internet yhteyttä. dy.fi palvelimeen ei voitu yhdistää.")
         return False, ""
     else:
         if req.status_code != 200:
             return False, "dy.fi palvelin virhe: {}".format(req.status_code)
         else:
             if re.match("good [0-9.]+", req.text):
-                logger.info("Päivitys onnistui: " + hostname + ", " + req.text)
+                logger.info("  Päivitys onnistui: " + hostname + ", " + req.text)
             elif re.match("nochg", req.text):
-                logger.warning("IP osoite ei ollut muuttunut viime päivityksestä.")
+                logger.warning("  IP osoite ei ollut muuttunut viime päivityksestä.")
             elif re.match("badauth", req.text):
-                logger.error("Tunnistautuminen epäonnistui.")
+                logger.error("  Tunnistautuminen epäonnistui.")
                 success = False
             elif re.match("nohost", req.text):
-                logger.error("Domain nimeä ei annettu tai käyttäjä ei omista " +
+                logger.error("  Domain nimeä ei annettu tai käyttäjä ei omista " +
                               "domainia")
                 success = False
             elif re.match("notfqdn", req.text):
-                logger.error("Domain nimi ei ole oikea .dy.fi domain")
+                logger.error("  Domain nimi ei ole oikea .dy.fi domain")
                 success = False
             elif re.match("badip [0-9.]+", req.text):
-                logger.error("IP osoite on virheellinen tai ei suomalaisomisteinen.")
+                logger.error("  IP osoite on virheellinen tai ei suomalaisomisteinen.")
                 success = False
             elif re.match("dnserr", req.text):
-                logger.error("Tekninen virhe dy.fi palvelimissa.")
+                logger.error("  Tekninen virhe dy.fi palvelimissa.")
                 success = False
             elif re.match("abuse", req.text):
-                logger.error("Päivitys estetty väärinkäytön vuoksi.")
+                logger.error("  Päivitys estetty väärinkäytön vuoksi.")
                 success = False
             return success, req.text
 
@@ -140,6 +140,7 @@ elif args.update:
     if len(config.sections()) > 0:
         for host in config:
             if host != 'DEFAULT':
+                logger.info("[" + host + "]")
                 days_since = since_update(config[host]["updated"])
                 time_up = (config[host]["updated"] == "0" or days_since > 5)
                 ip_changed = config[host]["last_ip"] != ip
@@ -147,17 +148,17 @@ elif args.update:
                     status, message = update(config[host]["user"], 
                                              config[host]["password"], host)
                     if status:
-                        logger.info("Päivitettiin nimi: " + host)
+                        logger.info(" Nimi päivitetty")
                         config[host]["updated"] = str(round(datetime.today().timestamp()))
                         config[host]["last_ip"] = ip
                     else:
-                        logger.error("Virhe päivityksessä: " + host)
-                        logger.error(message)
+                        logger.error("  Virhe päivityksessä")
+                        logger.error("  " + message)
                     save_config()
                 else:
-                    logger.info(host + ": IP osoitetta EI päivitetty")
-                    logger.info(host + ": päivitetty " + str(days_since) + 
-                                 " päivää sitten")
+                    logger.info("  IP osoitetta EI päivitetty")
+                    logger.info("  Viimeksi päivitetty " + str(days_since) + 
+                                "  päivää sitten")
     else:
         logger.warning("Ei yhtään nimeä. Aja \n\n" +
                         "  $ dyfi.py --add\n\nlisätäksesi dy.fi nimi")
