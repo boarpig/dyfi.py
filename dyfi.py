@@ -142,7 +142,7 @@ elif args.update:
             if host != 'DEFAULT':
                 logger.info("[" + host + "]")
                 days_since = since_update(config[host]["updated"])
-                time_up = (config[host]["updated"] == "0" or days_since > 5)
+                time_up = (config[host]["updated"] == "0" or days_since > 5 or days_since < 0)
                 ip_changed = config[host]["last_ip"] != ip
                 if time_up or ip_changed or args.force:
                     status, message = update(config[host]["user"], 
