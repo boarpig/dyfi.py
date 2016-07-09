@@ -5,4 +5,5 @@ Documentation=https://aper.dy.fi/lauri/dyfi.py
 [Service]
 Type=oneshot
 User=lauri
+RemainAfterExit=yes
 ExecStart=/home/lauri/bin/dyfi.py -u
