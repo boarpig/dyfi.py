@@ -1,9 +1,8 @@
 [Unit]
-Description=dy.fi domain name updater service
+Description=dy.fi domain name updater tool
 Documentation=https://aper.dy.fi/lauri/dyfi.py
 
 [Service]
 Type=oneshot
 User=lauri
-RemainAfterExit=yes
 ExecStart=/home/lauri/bin/dyfi.py -u

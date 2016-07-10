@@ -1,9 +1,10 @@
 [Unit]
-Description=dy.fi domain update timer
+Description=dy.fi domain updater
 
 [Timer]
 OnBootSec=2min
-OnActiveSec=1d
+OnCalendar=daily
+Persistent=true
 Unit=dyfi.service
 
 [Install]
