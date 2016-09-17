@@ -30,6 +30,9 @@ def update(user, password, hostname):
     baseurl = "https://www.dy.fi/nic/update?hostname=" 
     try:
         req = requests.get(baseurl + hostname, auth=(user, password))
+    except requests.exceptions.SSLError:
+        logger.error("SSL virhe. Turvallista yhteyttä ei voitu muodostaa")
+        return False, ""
     except:
         logger.error("  Ei internet yhteyttä. dy.fi palvelimeen ei voitu yhdistää.")
         return False, ""
