@@ -4,6 +4,7 @@
 from datetime import datetime
 import argparse
 import configparser
+import getpass
 import logging
 import os
 import os.path
@@ -15,6 +16,10 @@ import subprocess
 logging.basicConfig(format='%(message)s', level='WARNING')
 logger = logging.getLogger("dyfi")
 logger.setLevel('INFO')
+
+if getpass.getuser() != 'root':
+    logger.error("Virhe: dyfi.py vaatii toimiakseen root oikeudet.")
+    exit(-1)
 
 configname = os.path.expanduser("/etc/dyfi.cfg")
 
