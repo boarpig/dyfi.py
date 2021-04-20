@@ -9,13 +9,14 @@ import os
 import os.path
 import re
 import requests
+import stat
 import subprocess
 
 logging.basicConfig(format='%(message)s', level='WARNING')
 logger = logging.getLogger("dyfi")
 logger.setLevel('INFO')
 
-configname = os.path.expanduser("~/.dyfi.cfg")
+configname = os.path.expanduser("/etc/dyfi.cfg")
 
 config = configparser.ConfigParser()
 if not os.path.exists(configname):
@@ -86,6 +87,7 @@ def since_update(time):
 def save_config():
     with open(configname, "w") as configfile:
         config.write(configfile)
+    os.chmod(configname, stat.S_IRUSR | stat.S_IWUSR)
 
 def add_host():
     user = input("Käyttäjä: ")
