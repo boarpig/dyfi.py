@@ -29,6 +29,11 @@ if not os.path.exists(configname):
     print("Asetustiedostoa ei löytynyt. Aja \n\n" +
           "  $ dyfi.py --add\n\nlisätäksesi dy.fi nimi")
 else:
+    conf_stat = os.stat(configname)
+    conf_mode = stat.filemode(conf_stat.st_mode)
+    if conf_mode != '-rw-------':
+        logger.error("Asetustiedoston käyttöoikeudet virheelisiä. /etc/dyfi.cfg käyttöoikeuksien tulisi olla '-rw-------'.\nKorjataan automaattisesti.")
+        os.chmod(configname, stat.S_IRUSR | stat.S_IWUSR)
     with open(configname) as configfile:
         config.read_file(configfile)
 
