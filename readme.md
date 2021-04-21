@@ -6,12 +6,13 @@ kirjaston
 
 ## Asennus
 
-Kloonaa dyfi.py sopivaan kansioon
+Kloonaa dyfi.py sopivaan kansioon ja kopioi dyfi.py `/usr/bin/` hakemistoon.
 
 ```
     $ git clone https://github.com/boarpig/dyfi.py ~/dyfi.py
     $ sudo cp ~/dyfi.py /usr/bin/dyfi.py
     $ sudo chmod 0755 /usr/bin/dyfi.py
+```
 
 ## Käyttö lyhyesti
 
