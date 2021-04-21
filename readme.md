@@ -4,23 +4,32 @@ Yksinkertainen cronjobina ajettava dy.fi domain päivitin. dyfi.py vaatii
 toimiakseen python3 ja [Requests](http://docs.python-requests.org/en/latest/)
 kirjaston
 
-## Lyhyesti
+## Asennus
 
-    $ dyfi.py --add
+Kloonaa dyfi.py sopivaan kansioon
+
+```
+    $ git clone https://github.com/boarpig/dyfi.py ~/dyfi.py
+    $ sudo cp ~/dyfi.py /usr/bin/dyfi.py
+    $ sudo chmod 0755 /usr/bin/dyfi.py
+
+## Käyttö lyhyesti
+
+    # dyfi.py --add
     Käyttäjä: kalle.kayttaja@esimerkk.fi
     salasana: salasana123
     Domain nimi: host.dy.fi
-    $ dyfi.py -u
+    # dyfi.py -u
 
 ## Nimen lisääminen
 
-    $ dyfi.py --add
+    # dyfi.py --add
 
 ja syötä käyttäjä, salasana ja dy.fi nimi kysyttäessä.
 
 ## Muokkaus
 
-    $ dyfi.py --edit
+    # dyfi.py --edit
 
 dyfi.py avaa oletus editorin (ympäristömuuttuja $EDITOR) tai 'nano' jos $EDITOR
 muuttujaa ei ole asetettu
@@ -61,12 +70,12 @@ osiota.
 
 cronjob lisätään ajamalla
 
-    $ crontab -e
+    # crontab -e
 
 ja lisäämällä rivit
 
-    @reboot /path/to/dyfi.py -u
-    0 */4 * * * /path/to/dyfi.py -u
+    @reboot /usr/bin/dyfi.py -u
+    0 */4 * * * /usr/bin/dyfi.py -u
 
 Huomaa, että on suositeltavaa laittaa absoluuttinen polku dyfi.py ohjelmaan tai
 cron ei muuten välttämättä löydä sitä.
