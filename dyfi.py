@@ -85,7 +85,7 @@ def get_ip():
         logger.error("Ei internet yhteyttä. IP-osoitetta ei voitu hakea.")
         return None
     else:
-        regex = "(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})"
+        regex = r"(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})"
         match = re.search(regex, req.text)
         return match.group(1)
 
