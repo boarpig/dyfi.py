@@ -21,7 +21,7 @@ if getpass.getuser() != 'root':
     logger.error("Virhe: dyfi.py vaatii toimiakseen root oikeudet.")
     exit(-1)
 
-configname = os.path.expanduser("/etc/dyfi.cfg")
+configname = "/etc/dyfi.cfg"
 
 config = configparser.ConfigParser()
 if not os.path.exists(configname):
